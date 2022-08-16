@@ -55,16 +55,9 @@ pipeline {
 
         stage('Test Deploy') {
             steps {
-                sh '''
-                    kubectl apply -f 0-collector-namespace.yaml
-                    kubectl apply -f 1-collector-cluster-role.yaml
-                    kubectl apply -f 2-collector-rbac.yaml
-                    kubectl apply -f 3-collector-service-account.yaml
-                    kubectl apply -f 4-collector-config.yaml
-                    kubectl apply -f 5-collector-daemonset.yaml
-                    sleep 10s
-                    kubectl get pods -owide
-                '''     
+                script {
+                    kubernetesDeploy(configs: "5-collector-daemonset.yaml", kubeconfigID: "kubernetes")
+                }
             }
         }
     }
